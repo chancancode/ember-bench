@@ -1,0 +1,98 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require_relative "../lib/utils"
+
+def setup_features(original, overrides)
+  features = {}
+
+  original["features"].each do |(key, value)|
+    if overrides.key?(key)
+      features[key] = overrides[key]
+    elsif value.nil?
+      features[key] = false
+    else
+      features[key] = value
+    end
+  end
+
+  final = { features: features }
+
+  File.open("features.json", "w") do |f|
+    f.puts JSON.pretty_generate(final)
+  end
+end
+
+h1 "Building Ember..."
+
+h2 "Prepare"
+
+glimmer_previous_head = in_glimmer(silent: true) { `git name-rev --name-only --always HEAD`.strip }
+ember_previous_head   = in_ember(silent: true) { `git name-rev --name-only --always HEAD`.strip }
+
+here do
+  run "mkdir -p dist"
+  run "rm -rf dist/ember-*"
+end
+
+in_glimmer do
+  run "npm link"
+end
+
+in_ember do
+  run "npm link glimmer-engine"
+end
+
+each_experiment do |experiment|
+
+  h1 "Building #{experiment['name']}"
+
+  h2 "Setup"
+
+  in_glimmer do
+    run "git checkout #{experiment['glimmer']}"
+  end
+
+  in_ember do
+    run "rm -rf dist"
+
+    run "git reset --hard #{experiment['ember']}"
+    run "git checkout ."
+    run "git checkout -b #{experiment['name']}"
+
+    puts
+    puts "Re-writing features.json..."
+    puts
+
+    setup_features(parse_json("features.json", expand: false), experiment["features"])
+
+    run "git diff --word-diff=color"
+  end
+
+  h2 "Build"
+
+  in_ember do
+    run build_command_for("ember")
+    run "mv dist #{full_path('dist/ember-' + experiment['name'])}"
+  end
+
+  h2 "Cleanup"
+
+  in_ember do
+    run "git checkout ."
+    run "git checkout #{ember_previous_head}"
+    run "git branch -D #{experiment['name']}"
+  end
+end
+
+in_ember do
+  run "npm unlink glimmer-engine"
+end
+
+in_glimmer do
+  run "git checkout ."
+  run "git checkout #{glimmer_previous_head}"
+  run "npm unlink"
+end
+
+h1 "Done building Ember!", color: :green

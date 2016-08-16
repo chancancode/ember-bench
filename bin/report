@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require_relative "../lib/utils"
+
+h1 "Serving reports at http://localhost:9292/..."
+
+exec "#{full_path('bin/serve')} --reporter"

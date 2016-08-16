@@ -1,0 +1,15 @@
+#!/usr/bin/env Rscript
+samples = read.csv('stdin')
+
+# test whether the true location of the distribution is shifted
+# does not require data to be normally distributed
+wilcox.test(ms ~ set, data=samples)
+
+svg(file = "boxplot.svg")
+boxplot(ms ~ set, data=samples)
+dev.off()
+
+require(lattice)
+svg(file = "histogram.svg")
+histogram(~ms | set, data=samples, breaks=nclass.FD)
+dev.off()

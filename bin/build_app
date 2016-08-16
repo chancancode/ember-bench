@@ -1,0 +1,57 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require_relative "../lib/utils"
+
+h1 "Building App..."
+
+h2 "Prepare"
+
+previous_head = in_app(silent: true) { `git name-rev --name-only --always HEAD`.strip }
+
+here do
+  run "mkdir -p dist"
+  run "rm -rf dist/app-*"
+
+  run "mkdir -p dist/merged"
+  run "rm -rf dist/merged/*"
+end
+
+each_experiment do |experiment|
+
+  h1 "Building #{experiment['name']}"
+
+  h2 "Setup"
+
+  in_app do
+    run "rm -rf dist bower_components/ember"
+
+    run "git reset --hard #{experiment['app']}"
+    run "git checkout ."
+
+    run "ln -s #{full_path('dist/ember-' + experiment['name'])} bower_components/ember"
+  end
+
+  h2 "Build"
+
+  in_app do
+    run build_command_for("app")
+    run "rsync -a ./dist/ #{full_path('dist/merged/')}"
+    run "mv dist #{full_path('dist/app-' + experiment['name'])}"
+  end
+
+  here do
+    run "mv dist/merged/index.html dist/merged/index-#{experiment['name']}.html"
+  end
+
+end
+
+h2 "Cleanup"
+
+in_app do
+  run "git checkout ."
+  run "git checkout #{previous_head}"
+  run "rm bower_components/ember"
+end
+
+h1 "Done building App!", color: :green

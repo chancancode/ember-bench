@@ -1,0 +1,94 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require_relative "../lib/utils"
+
+h1 "System Information"
+
+check_version "rsync", "rsync --version", /version (\S+)/, '>= 2.0'
+check_version "Git", "git --version", /git version (\S+)/, '>= 2.0'
+check_version "Ruby", "ruby --version", /ruby (\S+)p/, '>= 2.1'
+check_version "Bundler", "bundler --version", /version (\S+)/, '>= 1.0'
+check_version "Node", "node --version", /v(\S+)/, '>= 4.0'
+check_version "TypeScript", "./node_modules/.bin/tsc --version", /Version (\S+)/, '>= 2.0'
+check_version "NPM", "npm --version", /(\S+)/, '>= 2.0'
+check_version "Bower", "bower --version", /(\S+)/, '>= 1.0'
+
+h1 "Pre-flight Checklist"
+
+h2 "Config Files"
+
+["config/experiments.json", "config/projects.json", "config/server.ru", "config/puma.rb"].each do |config_file|
+  puts config_file
+  check "  Exists", exists?(config_file), error_message: "Cannot find #{config_file}"
+  check "  Valid", valid_json?(config_file), error_message: "Cannot parse #{config_file} as JSON" if config_file.end_with?(".json")
+end
+
+h2 "Projects"
+
+$PROJECTS = parse_json("config/projects.json")
+
+["app", "ember", "glimmer"].each do |project|
+  puts project
+  config = $PROJECTS[project]
+
+  check "  Configuration", config, error_message: "Missing project config for #{project}"
+
+  build_command = config["build"]
+
+  if build_command && project == "glimmer"
+    check "  Build command", false, error_message: "Glimmer build command cannot be customized"
+  end
+
+  path = config["path"]
+
+  check "  Path exists", exists?(path, expand: false), error_message: "Invalid path: #{path}"
+  check "  Is directory", directory?(path, expand: false), error_message: "#{path} is not a directory"
+
+  Dir.chdir(path) do
+    check_command "  Is git repository", "git status", error_message: "#{path} is not a git repository"
+    check_command "  No unstaged changes", "git diff --exit-code", error_message: "#{path} has unstaged changes"
+    check_command "  No uncommited changes", "git diff --cached --exit-code", error_message: "#{path} has uncommited changes"
+    check_command "  NPM packages", "npm install", error_message: "`npm install` failed!"
+    check_command "  Bower packages", "bower install", error_message: "`bower install` failed!"
+    check_version "  Ember CLI", "ember --version", /ember-cli\: (\S+)/, '>= 2.0'
+  end
+end
+
+h2 "Experiments"
+
+$EXPERIMENTS = parse_json("config/experiments.json")
+
+$EXPERIMENTS.each_with_index do |experiment, i|
+  unless experiment["name"]
+    puts "Experiment ##{i}"
+    check "  Has valid name", false, error_message: "Experiment #{i} needs a name"
+  end
+
+  puts experiment["name"]
+
+  if experiment["name"] !~ /\A[a-z\-]*\z/
+    check "  Has valid name", false, error_message: "#{experiment['name']} is not a valid name: names can only contain lowercase letters and dashes"
+  end
+
+  in_ember(silent: true) do
+    if run "git branch | grep '^ *#{experiment["name"]}$'", silent: true, allow_failure: true
+      check "  Is not an existing Ember branch", false, error_message: "#{experiment['name']} is an existing branch in Ember, please pick a different name"
+    end
+  end
+
+  ["app", "ember", "glimmer"].each do |project|
+    Dir.chdir($PROJECTS[project]["path"]) do
+      puts "  #{project}"
+
+      rev = experiment[project]
+      short_name = (rev =~ /[0-9a-f]{40}/ ? rev[0...7] : rev)
+
+      check_command "    Is valid git checkout", "git checkout #{rev}", info: short_name, error_message: "#{rev} is not a valid git checkout for #{project}"
+    end
+  end
+end
+
+h1 "LGTM!", color: :green
+
+

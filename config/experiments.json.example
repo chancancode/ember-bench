@@ -1,0 +1,29 @@
+[
+  {
+    "name":    "htmlbars-alpha-3",
+    "app":     "sha-or-branch-or-tag",
+    "ember":   "8438d2b68a8a83e76262c21d56fbc6efeb0d147c",
+    "glimmer": "efc998a1649425ff90ad50e58dc2d25d03a23b24",
+    "features": {
+      "ember-glimmer": false
+    }
+  },
+  {
+    "name":    "glimmer-alpha-3",
+    "app":     "sha-or-branch-or-tag",
+    "ember":   "8438d2b68a8a83e76262c21d56fbc6efeb0d147c",
+    "glimmer": "efc998a1649425ff90ad50e58dc2d25d03a23b24",
+    "features": {
+      "ember-glimmer": true
+    }
+  },
+  {
+    "name":    "glimmer-latest",
+    "app":     "sha-or-branch-or-tag",
+    "ember":   "master",
+    "glimmer": "master",
+    "features": {
+      "ember-glimmer": true
+    }
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "app": {
+    "path": "/Users/godfrey/Code/my-app"
+  },
+  "ember": {
+    "path": "/Users/godfrey/Code/ember.js"
+  },
+  "glimmer": {
+    "path": "/Users/godfrey/Code/glimmer"
+  }
+}

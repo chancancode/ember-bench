@@ -1,0 +1,51 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require_relative "../lib/utils"
+
+at_exit { kill_puma! }
+
+h1 "Time for Science™"
+
+h2 "Prepare"
+
+here do
+  run "mkdir -p results"
+  run "rm -f results/*.json"
+  run "rm -rf dist/test"
+end
+
+h2 "Building test script"
+
+here do
+  run "./node_modules/.bin/tsc"
+end
+
+h2 "Starting puma"
+
+run "#{full_path('bin/serve')} --daemon"
+
+h2 "Running experiments"
+
+experiments = []
+
+each_experiment { |experiment| experiments << experiment["name"] }
+
+here do
+  run "node dist/test/test.js #{experiments.join(' ')}"
+end
+
+h2 "Archive"
+
+here do
+  timestamp = Time.new.strftime("%Y-%m-%d\\ %H:%M")
+
+  run "mkdir results/#{timestamp}"
+  run "mv results/*.json results/#{timestamp}"
+
+  each_experiment do |experiment|
+    run "ln -s #{timestamp}/#{experiment["name"]}.json results/#{experiment["name"]}.json"
+  end
+end
+
+h1 "All done!", color: :green

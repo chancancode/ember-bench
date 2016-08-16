@@ -1,0 +1,4 @@
+#!/bin/bash
+
+./bin/build_ember &&
+./bin/build_app

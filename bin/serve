@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require_relative "../lib/utils"
+
+rackup_file = "config/server.ru"
+
+options = [
+  "--config config/puma.rb",
+  "--pidfile tmp/puma.pid"
+]
+
+if ARGV.include?("--daemon")
+  options << "--daemon"
+end
+
+if ARGV.include?("--reporter")
+  rackup_file = "lib/reporter.ru"
+end
+
+Dir.chdir(full_path("."))
+
+exec "bundle exec puma #{options.join(' ')} #{rackup_file}"

@@ -1,0 +1,8 @@
+dist
+results
+node_modules
+tmp
+config/*.json
+config/*.rb
+config/*.ru
+test.ts
