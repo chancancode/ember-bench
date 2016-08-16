@@ -3,7 +3,8 @@
     "path": "/Users/godfrey/Code/my-app"
   },
   "ember": {
-    "path": "/Users/godfrey/Code/ember.js"
+    "path": "/Users/godfrey/Code/ember.js",
+    "build": "ember build -prod && /Users/godfrey/Code/ember-bench/bin/preparse"
   },
   "glimmer": {
     "path": "/Users/godfrey/Code/glimmer"

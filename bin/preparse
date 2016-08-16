@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require_relative "../lib/utils"
+
+PREPARSE_DIR = "/Users/godfrey/Code/build-preparse-dist"
+
+h2 "Running preparse"
+
+in_dir(PREPARSE_DIR, expand: false) do
+  run "mkdir -p bower_components"
+  run "rm -rf bower_components/ember"
+end
+
+in_ember do
+  run "mv dist #{PREPARSE_DIR}/bower_components/ember"
+end
+
+in_dir(PREPARSE_DIR, expand: false) do
+  run "ember build"
+end
+
+in_ember do
+  run "mv #{PREPARSE_DIR}/dist ."
+end
+
+h2 "Done preparse", color: :green
