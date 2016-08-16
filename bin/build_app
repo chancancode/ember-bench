@@ -26,8 +26,8 @@ each_experiment do |experiment|
   in_app do
     run "rm -rf dist bower_components/ember"
 
-    run "git reset --hard #{experiment['app']}"
     run "git checkout ."
+    run "git checkout #{experiment['app']}"
 
     run "ln -s #{full_path('dist/ember-' + experiment['name'])} bower_components/ember"
   end

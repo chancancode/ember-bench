@@ -56,8 +56,8 @@ each_experiment do |experiment|
   in_ember do
     run "rm -rf dist"
 
-    run "git reset --hard #{experiment['ember']}"
     run "git checkout ."
+    run "git checkout #{experiment['ember']}"
     run "git checkout -b #{experiment['name']}"
 
     puts
