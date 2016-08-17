@@ -79,7 +79,7 @@ module Utils
   end
 
   def check_version(component, cmd, pattern, requirement)
-    output  = `#{cmd} 2> /dev/null`
+    output  = `#{cmd} 2>&1`
     version = $?.success? && output =~ pattern && $1
 
     if version
