@@ -13,6 +13,7 @@ check_version "Node", "node --version", /v(\S+)/, '>= 4.0'
 check_version "TypeScript", "./node_modules/.bin/tsc --version", /Version (\S+)/, '>= 2.0'
 check_version "NPM", "npm --version", /(\S+)/, '>= 2.0'
 check_version "Bower", "bower --version", /(\S+)/, '>= 1.0'
+check_version "RScript", "RScript --version", /version (\S+)/, '>= 3.0'
 
 h1 "Pre-flight Checklist"
 
