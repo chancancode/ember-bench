@@ -51,6 +51,7 @@ each_experiment do |experiment|
 
   in_glimmer do
     run "git checkout #{experiment['glimmer']}"
+    run "npm install"
   end
 
   in_ember do
@@ -59,6 +60,7 @@ each_experiment do |experiment|
     run "git checkout ."
     run "git checkout #{experiment['ember']}"
     run "git checkout -b #{experiment['name']}"
+    run "npm install"
 
     puts
     puts "Re-writing features.json..."
@@ -87,12 +89,14 @@ end
 
 in_ember do
   run "npm unlink glimmer-engine"
+  run "npm install"
 end
 
 in_glimmer do
   run "git checkout ."
   run "git checkout #{glimmer_previous_head}"
   run "npm unlink"
+  run "npm install"
 end
 
 h1 "Done building Ember!", color: :green
