@@ -85,7 +85,7 @@ $EXPERIMENTS.each_with_index do |experiment, i|
       rev = experiment[project]
       short_name = (rev =~ /[0-9a-f]{40}/ ? rev[0...7] : rev)
 
-      check_command "    Is valid git checkout", "git checkout #{rev}", info: short_name, error_message: "#{rev} is not a valid git checkout for #{project}"
+      check_command "    Is valid git checkout", "git rev-parse --verify --quiet #{rev}", info: short_name, error_message: "#{rev} is not a valid git checkout for #{project}"
     end
   end
 end
