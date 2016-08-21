@@ -178,6 +178,11 @@ module Utils
     result
   end
 
+  def experiment_cofig(name)
+    @experiments ||= parse_json("config/experiments.json")
+    @experiments.find { |experiment| experiment["name"] === name }
+  end
+
   def each_experiment
     @experiments ||= parse_json("config/experiments.json")
     @experiments.each { |experiment| yield experiment }

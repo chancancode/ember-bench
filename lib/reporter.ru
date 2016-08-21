@@ -14,12 +14,14 @@ class Reporter
 
     header = { "Content-Type" => "text/html" }
 
-    if req.params["mode"] == "save"
+    download = req.params["mode"] == "save"
+
+    if download
       header["Content-Disposition"] = 'attachment; filename="report.html"'
     end
 
     if control && experiment
-      [200, header, [report(control, experiment)]]
+      [200, header, [report(control, experiment, download)]]
     else
       [200, header, [index(control, experiment)]]
     end
@@ -62,9 +64,27 @@ class Reporter
     HTML
   end
 
-  def report(control, experiment)
+  def report(control, experiment, download)
     <<-HTML
-      #{index(control, experiment)}
+      #{
+        if download
+          "<h1>#{control} vs #{experiment}"
+        else
+          index(control, experiment)
+        end
+      }
+
+      <hr>
+
+      <h2>Config</h2>
+
+      <h3>Control: #{control}</h3>
+
+      <pre><code>#{JSON.pretty_generate(experiment_cofig(control))}</code></pre>
+
+      <h3>Experiment: #{experiment}</h3>
+
+      <pre><code>#{JSON.pretty_generate(experiment_cofig(experiment))}</code></pre>
 
       <hr>
 
