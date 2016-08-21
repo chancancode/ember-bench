@@ -68,8 +68,8 @@ $EXPERIMENTS.each_with_index do |experiment, i|
 
   puts experiment["name"]
 
-  if experiment["name"] !~ /\A[a-z\-]*\z/
-    check "  Has valid name", false, error_message: "#{experiment['name']} is not a valid name: names can only contain lowercase letters and dashes"
+  if experiment["name"] !~ /\A[a-z0-9\-\.]*\z/
+    check "  Has valid name", false, error_message: "#{experiment['name']} is not a valid name: names can only contain lowercase letters, numbers and dashes"
   end
 
   in_ember(silent: true) do
