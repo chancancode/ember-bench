@@ -2,8 +2,9 @@
   "name": "ember-bench",
   "version": "0.0.0",
   "dependencies": {
-    "@types/node": "^6.0.33",
+    "@types/node": "^6.0.37",
     "chrome-tracing": "^0.4.0",
+    "tslint": "^3.15.1",
     "typescript": "^2.0.0"
   }
 }
