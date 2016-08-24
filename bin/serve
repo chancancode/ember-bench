@@ -7,10 +7,12 @@ run "mkdir -p tmp"
 
 rackup_file = "config/server.ru"
 
-options = [
-  "--config config/puma.rb",
-  "--pidfile tmp/puma.pid"
-]
+options = experiments.map.with_index do |experiment, i|
+  "-p #{DEFAULT_PORT + i}"
+end
+
+options << "--config config/puma.rb"
+options << "--pidfile tmp/puma.pid"
 
 if ARGV.include?("--daemon")
   options << "--daemon"

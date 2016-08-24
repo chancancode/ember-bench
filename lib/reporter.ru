@@ -80,11 +80,11 @@ class Reporter
 
       <h3>Control: #{control}</h3>
 
-      <pre><code>#{JSON.pretty_generate(experiment_cofig(control))}</code></pre>
+      <pre><code>#{JSON.pretty_generate(experiment_config(control))}</code></pre>
 
       <h3>Experiment: #{experiment}</h3>
 
-      <pre><code>#{JSON.pretty_generate(experiment_cofig(experiment))}</code></pre>
+      <pre><code>#{JSON.pretty_generate(experiment_config(experiment))}</code></pre>
 
       <hr>
 

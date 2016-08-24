@@ -4,6 +4,7 @@ require "json"
 module Utils
   YES = "\u2714".green
   NO  = "\u2718".red
+  DEFAULT_PORT = 9292
 
   def h1(str, color: :cyan)
     puts
@@ -178,14 +179,16 @@ module Utils
     result
   end
 
-  def experiment_cofig(name)
+  def experiments
     @experiments ||= parse_json("config/experiments.json")
-    @experiments.find { |experiment| experiment["name"] === name }
+  end
+
+  def experiment_config(name)
+    experiments.find { |experiment| experiment["name"] === name }
   end
 
   def each_experiment
-    @experiments ||= parse_json("config/experiments.json")
-    @experiments.each { |experiment| yield experiment }
+    experiments.each { |experiment| yield experiment }
   end
 
   def kill_puma!
