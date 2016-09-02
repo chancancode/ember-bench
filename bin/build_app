@@ -24,10 +24,12 @@ each_experiment do |experiment|
   h2 "Setup"
 
   in_app do
-    run "rm -rf dist bower_components/ember"
-
     run "git checkout ."
     run "git checkout #{experiment['app']}"
+
+    run "npm install"
+    run "bower install"
+    run "rm -rf dist bower_components/ember"
 
     run "ln -s #{full_path('dist/ember-' + experiment['name'])} bower_components/ember"
   end
