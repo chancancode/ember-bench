@@ -51,9 +51,10 @@ each_experiment do |experiment|
 
   in_glimmer do
     run "git checkout #{experiment['glimmer']}"
+
     run "npm install"
     run "bower install"
-    run "ember build -prod"
+    run build_command_for("glimmer")
   end
 
   in_ember do
@@ -62,6 +63,7 @@ each_experiment do |experiment|
     run "git checkout ."
     run "git checkout #{experiment['ember']}"
     run "git checkout -b #{experiment['name']}"
+
     run "npm install"
     run "bower install"
 
