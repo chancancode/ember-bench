@@ -39,10 +39,6 @@ in_glimmer do
   run "npm link"
 end
 
-in_ember do
-  run "npm link glimmer-engine"
-end
-
 each_experiment do |experiment|
 
   h1 "Building #{experiment['name']}"
@@ -50,10 +46,13 @@ each_experiment do |experiment|
   h2 "Setup"
 
   in_glimmer do
+    run "rm -rf dist"
+
     run "git checkout #{experiment['glimmer']}"
 
     run "npm install"
     run "bower install"
+
     run build_command_for("glimmer")
   end
 
@@ -64,8 +63,11 @@ each_experiment do |experiment|
     run "git checkout #{experiment['ember']}"
     run "git checkout -b #{experiment['name']}"
 
+    run "npm unlink glimmer-engine"
     run "npm install"
     run "bower install"
+
+    run "npm link glimmer-engine"
 
     puts
     puts "Re-writing features.json..."
@@ -95,13 +97,15 @@ end
 in_ember do
   run "npm unlink glimmer-engine"
   run "npm install"
+  run "bower install"
 end
 
 in_glimmer do
   run "git checkout ."
   run "git checkout #{glimmer_previous_head}"
-  run "npm unlink"
+
   run "npm install"
+  run "bower install"
 end
 
 h1 "Done building Ember!", color: :green
