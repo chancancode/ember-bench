@@ -17,7 +17,7 @@ class Reporter
     download = req.params["mode"] == "save"
 
     if download
-      header["Content-Disposition"] = 'attachment; filename="${control}-vs-#{experiment}.html"'
+      header["Content-Disposition"] = "attachment; filename=\"#{control}-vs-#{experiment}.html\""
     end
 
     if control && experiment
