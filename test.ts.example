@@ -1,6 +1,8 @@
 import { InitialRenderBenchmark, InitialRenderSamples, ITab, Runner } from "chrome-tracing";
 import * as fs from "fs";
 
+const DEFAULT_PORT = 9292;
+
 let browserOpts = process.env.CHROME_BIN ? {
   type: "exact",
   executablePath: process.env.CHROME_BIN
@@ -26,15 +28,18 @@ const DATA = {
 };
 
 class MyInitialRenderBenchmark extends InitialRenderBenchmark {
-  constructor(name: string) {
+  port: number;
+  constructor(name: string, index: number) {
+    let port = DEFAULT_PORT + index;
     super({
       name,
-      url: `http://localhost:9292/?tracing`,
+      url: `http://localhost:${port}?tracing`,
       markers: [
         { start: "domLoading", label: "load" },
       ],
       browser: browserOpts
     });
+    this.port = port;
   }
 
   async warm(tab: ITab): Promise<void> {
@@ -48,21 +53,21 @@ class MyInitialRenderBenchmark extends InitialRenderBenchmark {
       document.cookie = "/index-${this.name}.html";
     `);
 
-    await tab.navigate('http://localhost:9292/404', true);
+    await tab.navigate(`http://localhost:${this.port}/404`, true);
 
     await new Promise(resolve => setTimeout(resolve, 2500));
 
     await tab.removeScriptToEvaluateOnLoad(id);
 
-    await tab.navigate(`http://localhost:9292/?cached`, true);
+    await tab.navigate(`http://localhost:${this.port}/?cached`, true);
 
     await new Promise(resolve => setTimeout(resolve, 2500));
 
-    await tab.navigate(`http://localhost:9292/?tracing`, true);
+    await tab.navigate(`http://localhost:${this.port}/?tracing`, true);
   }
 }
 
-new Runner(process.argv.slice(2).map(exp => new MyInitialRenderBenchmark(exp)))
+new Runner(process.argv.slice(2).map((exp, i) => new MyInitialRenderBenchmark(exp, i)))
 .run(50)
 .then(results => {
   results.forEach(result => {
