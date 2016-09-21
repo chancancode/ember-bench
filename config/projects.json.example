@@ -1,7 +1,6 @@
 {
   "app": {
-    "path": "/Users/godfrey/Code/my-app",
-    "build": "ember build -prod"
+    "path": "/Users/godfrey/Code/my-app"
   },
   "ember": {
     "path": "/Users/godfrey/Code/ember.js"
