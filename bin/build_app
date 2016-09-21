@@ -38,12 +38,7 @@ each_experiment do |experiment|
 
   in_app do
     run build_command_for("app")
-    run "rsync -a ./dist/ #{full_path('dist/merged/')}"
     run "mv dist #{full_path('dist/app-' + experiment['name'])}"
-  end
-
-  here do
-    run "mv dist/merged/index.html dist/merged/index-#{experiment['name']}.html"
   end
 
 end

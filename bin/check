@@ -5,7 +5,6 @@ require_relative "../lib/utils"
 
 h1 "System Information"
 
-check_version "rsync", "rsync --version", /version (\S+)/, '>= 2.0'
 check_version "Git", "git --version", /git version (\S+)/, '>= 2.0'
 check_version "Ruby", "ruby --version", /ruby (\S+)p/, '>= 2.1'
 check_version "Bundler", "bundler --version", /version (\S+)/, '>= 1.0'
@@ -63,7 +62,7 @@ $EXPERIMENTS = parse_json("config/experiments.json")
 $EXPERIMENTS.each_with_index do |experiment, i|
   unless experiment["name"]
     puts "Experiment ##{i}"
-    check "  Has valid name", false, error_message: "Experiment #{i} needs a name"
+    check "  Has valid name", false, error_message: "Experiment ##{i} needs a name"
   end
 
   puts experiment["name"]
