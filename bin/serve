@@ -5,13 +5,11 @@ require_relative "../lib/utils"
 
 run "mkdir -p tmp"
 
-rackup_file = "config/server.ru"
-
 options = experiments.map.with_index do |experiment, i|
   "-p #{BASE_PORT + i}"
 end
 
-options << "--config config/puma.rb"
+options << "--config lib/puma.rb"
 options << "--pidfile tmp/puma.pid"
 
 if ARGV.include?("--daemon")
@@ -20,6 +18,8 @@ end
 
 if ARGV.include?("--reporter")
   rackup_file = "lib/reporter.ru"
+else
+  rackup_file = "lib/server.ru"
 end
 
 Dir.chdir(full_path("."))

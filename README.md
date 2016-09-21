@@ -43,20 +43,6 @@ Each experiment has the following keys:
 * `glimmer`: (required) a revision (SHA), tag or branch name from Glimmer
 * `features`: (optional) Ember feature flag overrides
 
-### puma.rb
-
-Puma (web server) configurations. Start by copying `config/puma.rb.example` to
-`config/puma.rb`.
-
-You shouldn't have to change much in here.
-
-### server.ru
-
-A simple Rack server to serve the local assets. Start by copying `config/server.ru.example`
-to `config/server.ru`.
-
-You shouldn't have to change much in here.
-
 ### test.ts
 
 The test script. Start by copying `test.ts.example` (in the root) to `test.ts`.
