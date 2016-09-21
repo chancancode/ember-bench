@@ -4,7 +4,8 @@ require "json"
 module Utils
   YES = "\u2714".green
   NO  = "\u2718".red
-  DEFAULT_PORT = 9292
+
+  BASE_PORT = 9292
 
   def h1(str, color: :cyan)
     puts

@@ -8,7 +8,7 @@ run "mkdir -p tmp"
 rackup_file = "config/server.ru"
 
 options = experiments.map.with_index do |experiment, i|
-  "-p #{DEFAULT_PORT + i}"
+  "-p #{BASE_PORT + i}"
 end
 
 options << "--config config/puma.rb"

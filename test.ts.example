@@ -1,7 +1,7 @@
 import { InitialRenderBenchmark, InitialRenderSamples, ITab, Runner } from "chrome-tracing";
 import * as fs from "fs";
 
-const DEFAULT_PORT = 9292;
+const BASE_PORT = 9292;
 
 let browserOpts = process.env.CHROME_BIN ? {
   type: "exact",
@@ -30,7 +30,7 @@ const DATA = {
 class MyInitialRenderBenchmark extends InitialRenderBenchmark {
   port: number;
   constructor(name: string, index: number) {
-    let port = DEFAULT_PORT + index;
+    let port = BASE_PORT + index;
     super({
       name,
       url: `http://localhost:${port}?tracing`,
