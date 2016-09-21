@@ -12,9 +12,6 @@ previous_head = in_app(silent: true) { `git name-rev --name-only --always HEAD`.
 here do
   run "mkdir -p dist"
   run "rm -rf dist/app-*"
-
-  run "mkdir -p dist/merged"
-  run "rm -rf dist/merged/*"
 end
 
 each_experiment do |experiment|
