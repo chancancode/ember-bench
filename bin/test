@@ -28,12 +28,8 @@ run "#{full_path('bin/serve')} --daemon"
 
 h2 "Running experiments"
 
-experiments = []
-
-each_experiment { |experiment| experiments << experiment["name"] }
-
 here do
-  run "node dist/test/test.js #{experiments.join(' ')}"
+  run "node dist/test/test.js"
 end
 
 h2 "Archive"

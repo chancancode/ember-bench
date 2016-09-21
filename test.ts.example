@@ -10,65 +10,60 @@ let browserOpts = process.env.CHROME_BIN ? {
   type: "system"
 };
 
-const DATA = {
-  "GET http://my.api.com/posts": {
-    "posts": [
-      {
-        "id": 1,
-        "title": "Rails is omakase",
-        "body": "There are lots of à la carte software..."
-      },
-      {
-        "id": 2,
-        "title": "Ember is omakase",
-        "body": "There are lots of à la carte software..."
-      }
-    ]
-  }
-};
+let experiments = JSON.parse(fs.readFileSync('config/experiments.json', 'utf8'));
 
-class MyInitialRenderBenchmark extends InitialRenderBenchmark {
-  port: number;
-  constructor(name: string, index: number) {
-    let port = BASE_PORT + index;
+async function sleep(ms) {
+  await new Promise(resolve => setTimeout(resolve, 2500));
+}
+
+class EmberBench extends InitialRenderBenchmark {
+  static all(): EmberBench[] {
+    return experiments.map((experiment, i) => {
+      let { name, url } = experiment;
+      let port = BASE_PORT + i;
+
+      if (!url) {
+        url = "/";
+      } else if (url.charAt(0) !== "/") {
+        url = "/" + url;
+      }
+
+      return new EmberBench(name, port, `http://localhost:${port}${url}`);
+    });
+  }
+
+  constructor(name: string, private port: number, private url: string) {
     super({
       name,
-      url: `http://localhost:${port}?tracing`,
+      url,
       markers: [
-        { start: "domLoading", label: "load" },
+        { start: "domLoading", label: "done" },
       ],
       browser: browserOpts
     });
-    this.port = port;
   }
 
   async warm(tab: ITab): Promise<void> {
-    let id = await tab.addScriptToEvaluateOnLoad(`
-      let data = JSON.parse(${JSON.stringify(DATA)});
+    await tab.navigate(`http://localhost:${this.port}/preload.html`, true);
 
-      Object.keys(data).forEach(function(key) {
-        window.localStorage.setItem(key, JSON.stringify(data[key]));
-      });
+    await sleep(2500);
 
-      document.cookie = "/index-${this.name}.html";
-    `);
+    await tab.navigate(this.url, true);
 
-    await tab.navigate(`http://localhost:${this.port}/404`, true);
+    await sleep(2500);
 
-    await new Promise(resolve => setTimeout(resolve, 2500));
+    await tab.navigate(this.url, true);
 
-    await tab.removeScriptToEvaluateOnLoad(id);
+    await sleep(2500);
 
-    await tab.navigate(`http://localhost:${this.port}/?cached`, true);
+    await tab.navigate(this.url, true);
 
-    await new Promise(resolve => setTimeout(resolve, 2500));
-
-    await tab.navigate(`http://localhost:${this.port}/?tracing`, true);
+    await sleep(2500);
   }
 }
 
-new Runner(process.argv.slice(2).map((exp, i) => new MyInitialRenderBenchmark(exp, i)))
-.run(50)
+new Runner(EmberBench.all())
+.run(100)
 .then(results => {
   results.forEach(result => {
     fs.writeFileSync(`results/${result.set}.json`, JSON.stringify(result))

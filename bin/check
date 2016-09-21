@@ -18,10 +18,10 @@ h1 "Pre-flight Checklist"
 
 h2 "Config Files"
 
-["config/experiments.json", "config/projects.json"].each do |config_file|
+["config/experiments.json", "config/projects.json", "config/preload.html"].each do |config_file|
   puts config_file
   check "  Exists", exists?(config_file), error_message: "Cannot find #{config_file}"
-  check "  Valid", valid_json?(config_file), error_message: "Cannot parse #{config_file} as JSON"
+  check "  Valid", valid_json?(config_file), error_message: "Cannot parse #{config_file} as JSON" if config_file.end_with?(".json")
 end
 
 h2 "Projects"

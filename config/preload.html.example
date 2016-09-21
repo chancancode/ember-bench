@@ -1,0 +1,27 @@
+<script>
+// This page will be visited *once* in each browser session before running the
+// benchmarks. You can use this opportunity to preload any data for your app.
+
+var DATA = {
+  "GET http://my.api.com/posts": {
+    "posts": [
+      {
+        "id": 1,
+        "title": "Rails is omakase",
+        "body": "There are lots of à la carte software..."
+      },
+      {
+        "id": 2,
+        "title": "Ember is omakase",
+        "body": "There are lots of à la carte software..."
+      }
+    ]
+  }
+};
+
+Object.keys(DATA).forEach(function(key) {
+  // Instead of doing real AJAX requests, configure your app to fetch data from
+  // these localStorage keys when benchmarking.
+  window.localStorage.setItem(key, JSON.stringify(data[key]));
+});
+</script>

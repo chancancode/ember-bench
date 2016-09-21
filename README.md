@@ -42,6 +42,13 @@ Each experiment has the following keys:
 * `ember`: (required) a revision (SHA), tag, or branch name from Ember
 * `glimmer`: (required) a revision (SHA), tag or branch name from Glimmer
 * `features`: (optional) Ember feature flag overrides
+* `url`: (optional) path to visit, defaults to `/`
+
+### preload.html
+
+Preloads data for your app. Start by copying `config/preload.html.example` to `config/projects.html`.
+
+See the comments in the file for details.
 
 ### test.ts
 

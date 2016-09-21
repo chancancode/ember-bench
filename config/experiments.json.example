@@ -12,6 +12,12 @@
     "glimmer": "v0.13.1"
   },
   {
+    "name":    "2-9-beta-2",
+    "app":     "sha-or-branch-or-tag",
+    "ember":   "v2.9.0-beta.2",
+    "glimmer": "v0.13.2"
+  },
+  {
     "name":    "2-9-beta-3",
     "app":     "sha-or-branch-or-tag",
     "ember":   "v2.9.0-beta.3",
