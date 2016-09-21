@@ -2,7 +2,6 @@ dist
 results
 node_modules
 tmp
-config/*.json
-config/*.rb
-config/*.ru
+config/*
+!config/*.example
 test.ts
