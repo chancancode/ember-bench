@@ -73,7 +73,7 @@ each_experiment do |experiment|
     puts "Re-writing features.json..."
     puts
 
-    setup_features(parse_json("features.json", expand: false), experiment["features"])
+    setup_features(parse_json("features.json", expand: false), experiment["features"] || {})
 
     run "git diff --word-diff=color"
   end
