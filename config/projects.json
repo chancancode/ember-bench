@@ -1,0 +1,12 @@
+{
+  "app": {
+    "path": "/Users/godfrey/Code/emberobserver",
+    "build": "FAVICON=false EXTERNAL_FONTS=false REPORT_ERRORS=false COLLECT_METRICS=false ember build -prod"
+  },
+  "ember": {
+    "path": "/Users/godfrey/Code/ember.js"
+  },
+  "glimmer": {
+    "path": "/Users/godfrey/Code/glimmer"
+  }
+}
