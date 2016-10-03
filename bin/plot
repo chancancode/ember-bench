@@ -6,7 +6,7 @@ samples = read.csv('stdin')
 wilcox.test(ms ~ set, data=samples)
 
 svg(file = "boxplot.svg")
-boxplot(ms ~ set, data=samples)
+boxplot(ms ~ set, data=samples, conf.int=TRUE)
 dev.off()
 
 require(lattice)
