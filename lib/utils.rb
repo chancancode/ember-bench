@@ -138,7 +138,7 @@ module Utils
 
   def build_command_for(project)
     @projects ||= parse_json("config/projects.json")
-    @projects[project]["build"] || "ember build -prod"
+    @projects[project]["build"] || "SKIP_DEPENDENCY_CHECKER=true ember build -prod"
   end
 
   def here(**options)
