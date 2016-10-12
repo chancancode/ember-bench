@@ -3,10 +3,10 @@ samples = read.csv('stdin')
 
 # test whether the true location of the distribution is shifted
 # does not require data to be normally distributed
-wilcox.test(ms ~ set, data=samples)
+wilcox.test(ms ~ set, data=samples, conf.int=TRUE)
 
 svg(file = "boxplot.svg")
-boxplot(ms ~ set, data=samples, conf.int=TRUE)
+boxplot(ms ~ set, data=samples)
 dev.off()
 
 require(lattice)
