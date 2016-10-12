@@ -1,0 +1,62 @@
+[
+  {
+    "name":    "2-6-2",
+    "app":     "any-ember",
+    "ember":   "v2.6.2",
+    "glimmer": "2849de8"
+  },
+  {
+    "name":    "2-7-3",
+    "app":     "any-ember",
+    "ember":   "v2.7.3",
+    "glimmer": "bf8213"
+  },
+  {
+    "name":    "2-8-2",
+    "app":     "any-ember",
+    "ember":   "v2.8.2",
+    "glimmer": "0a13e7b"
+  },
+  {
+    "name":    "2-9-beta-1",
+    "app":     "any-ember",
+    "ember":   "v2.9.0-beta.1",
+    "glimmer": "v0.13.1"
+  },
+  {
+    "name":    "2-9-beta-2",
+    "app":     "any-ember",
+    "ember":   "v2.9.0-beta.2",
+    "glimmer": "v0.13.2"
+  },
+  {
+    "name":    "2-9-beta-3",
+    "app":     "any-ember",
+    "ember":   "v2.9.0-beta.3",
+    "glimmer": "v0.17.0"
+  },
+  {
+    "name":    "2-9-beta-4",
+    "app":     "any-ember",
+    "ember":   "v2.9.0-beta.4",
+    "glimmer": "v0.17.4"
+  },
+  {
+    "name":    "2-9-beta-5",
+    "app":     "any-ember",
+    "ember":   "v2.9.0-beta.5",
+    "glimmer": "v0.17.4"
+  },
+  {
+    "name":    "2-9-beta-latest",
+    "app":     "any-ember",
+    "ember":   "7c5205c",
+    "glimmer": "v0.17.4"
+  },
+  {
+    "name":    "2-10-alpha-latest",
+    "app":     "any-ember",
+    "ember":   "8cb34f3",
+    "glimmer": "v0.17.4"
+  }
+]

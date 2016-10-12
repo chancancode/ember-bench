@@ -1,0 +1,12 @@
+{
+  "app": {
+    "path": "/Users/godfrey/Code/ember-cli-addon-search",
+    "build": "AIRPLANE_MODE=true ember build -prod"
+  },
+  "ember": {
+    "path": "/Users/godfrey/Code/ember.js"
+  },
+  "glimmer": {
+    "path": "/Users/godfrey/Code/glimmer"
+  }
+}
