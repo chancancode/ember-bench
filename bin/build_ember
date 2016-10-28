@@ -45,15 +45,17 @@ each_experiment do |experiment|
 
   h2 "Setup"
 
-  in_glimmer do
-    run "rm -rf dist"
+  if experiment['glimmer']
+    in_glimmer do
+      run "rm -rf dist"
 
-    run "git checkout #{experiment['glimmer']}"
+      run "git checkout #{experiment['glimmer']}"
 
-    run "npm install"
-    run "bower install"
+      run "npm install"
+      run "bower install"
 
-    run build_command_for("glimmer")
+      run build_command_for("glimmer")
+    end
   end
 
   in_ember do
@@ -67,7 +69,7 @@ each_experiment do |experiment|
     run "npm install"
     run "bower install"
 
-    run "npm link glimmer-engine"
+    run "npm link glimmer-engine" if experiment['glimmer']
 
     puts
     puts "Re-writing features.json..."
