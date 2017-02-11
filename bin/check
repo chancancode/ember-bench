@@ -53,8 +53,15 @@ libraries.each do |project|
     check_command "  Is git repository", "git status", error_message: "#{path} is not a git repository"
     check_command "  No unstaged changes", "git diff --exit-code", error_message: "#{path} has unstaged changes"
     check_command "  No uncommited changes", "git diff --cached --exit-code", error_message: "#{path} has uncommited changes"
-    check_command "  NPM packages", "npm install", error_message: "`npm install` failed!"
-    check_command "  Bower packages", "bower install", error_message: "`bower install` failed!"
+
+    check "  NPM packages", error_message: "`npm install` failed!" do
+      install_node_modules(silent: true, allow_failure: true)
+    end
+
+    check "  Bower packages", error_message: "`bower install` failed!" do
+      install_bower_components(silent: true, allow_failure: true)
+    end
+
     check_version "  Ember CLI", "ember --version", /ember-cli\: (\S+)/, '>= 2.0'
   end
 end

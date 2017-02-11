@@ -64,16 +64,16 @@ each_experiment do |experiment|
     in_glimmer do
       run "git checkout #{experiment['glimmer']}"
 
-      if has_glimmer_engine
-        run "npm link"
-        run "npm install"
-        run "bower install"
-        run build_command_for("glimmer")
-      else
-        run "npm install"
+      install_node_modules
+      install_bower_components
 
+      if has_glimmer_engine
+        run build_command_for("glimmer")
+        run "npm link"
+      else
         GLIMMER_PACKAGES.each do |package|
           in_dir "./packages/@glimmer/#{package}", expand: false do
+            run build_command_for("glimmer")
             run "npm link"
           end
         end
@@ -92,8 +92,8 @@ each_experiment do |experiment|
       end
     end
 
-    run "npm install"
-    run "bower install"
+      install_node_modules
+      install_bower_components
 
     if custom_glimmer?(experiment)
       if has_glimmer_engine
@@ -135,8 +135,8 @@ if custom_glimmer?
     run "git checkout ."
     run "git checkout #{glimmer_previous_head}"
 
-    run "npm install"
-    run "bower install"
+    install_node_modules
+    install_bower_components
   end
 
   in_ember do
@@ -151,8 +151,8 @@ if custom_glimmer?
 end
 
 in_ember do
-  run "npm install"
-  run "bower install"
+  install_node_modules
+  install_bower_components
 end
 
 h1 "Done building Ember!", color: :green

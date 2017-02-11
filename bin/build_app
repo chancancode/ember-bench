@@ -24,8 +24,8 @@ each_experiment do |experiment|
     run "git checkout ."
     run "git checkout #{experiment['app']}"
 
-    run "npm install"
-    run "bower install"
+    install_node_modules
+    install_bower_components
 
     if custom_ember?(experiment)
       run "rm -rf dist bower_components/ember"

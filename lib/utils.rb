@@ -180,6 +180,23 @@ module Utils
     result
   end
 
+  def install_node_modules(**options)
+    if exists?("yarn.lock", expand: false)
+      run("rm -rf node_modules", **options) &&
+      run("yarn install", **options)
+    else
+      run "npm install", **options
+    end
+  end
+
+  def install_bower_components
+    if exists?("bower.json", expand: false)
+      run "bower install"
+    else
+      true
+    end
+  end
+
   def experiments
     @experiments ||= parse_json("config/experiments.json")
   end
