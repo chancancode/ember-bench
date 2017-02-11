@@ -26,9 +26,11 @@ each_experiment do |experiment|
 
     run "npm install"
     run "bower install"
-    run "rm -rf dist bower_components/ember"
 
-    run "ln -s #{full_path('dist/ember-' + experiment['name'])} bower_components/ember"
+    if custom_ember
+      run "rm -rf dist bower_components/ember"
+      run "ln -s #{full_path('dist/ember-' + experiment['name'])} bower_components/ember"
+    end
   end
 
   h2 "Build"
@@ -45,7 +47,10 @@ h2 "Cleanup"
 in_app do
   run "git checkout ."
   run "git checkout #{previous_head}"
-  run "rm bower_components/ember"
+
+  if custom_ember
+    run "rm bower_components/ember"
+  end
 end
 
 h1 "Done building App!", color: :green

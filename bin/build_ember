@@ -32,6 +32,11 @@ end
 
 h1 "Building Ember..."
 
+unless custom_ember
+  h2 "Nothing to do"
+  exit
+end
+
 h2 "Prepare"
 
 glimmer_previous_head = in_glimmer(silent: true) { `git name-rev --name-only --always HEAD`.strip }

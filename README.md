@@ -21,10 +21,10 @@ Projects configurations. Start by copying `config/projects.json.example` to
 * `app`: (required)
   * `path`: (required) absolute path to the local clone of your Ember app
   * `build`: (optional) command for building the app, defaults to `ember build -prod`
-* `ember`: (required)
+* `ember`: (optional)
   * `path`: (required) absolute path to the local clone of Ember (https://github.com/emberjs/ember.js)
   * `build`: (optional) command for building Ember, defaults to `ember build -prod`
-* `glimmer`: (required)
+* `glimmer`: (optional)
   * `path`: (required) absolute path to the local clone of Glimmer (https://github.com/tildeio/glimmer)
   * `build`: (optional) command for building Glimmer, defaults to `ember build -prod`
 
@@ -39,8 +39,8 @@ Each experiment has the following keys:
 
 * `name`: (required) a name for this experiment
 * `app`: (required) a revision (SHA), tag, or branch name from your Ember app
-* `ember`: (required) a revision (SHA), tag, or branch name from Ember
-* `glimmer`: (required) a revision (SHA), tag or branch name from Glimmer
+* `ember`: (optional) a revision (SHA), tag, or branch name from Ember
+* `glimmer`: (optional) a revision (SHA), tag or branch name from Glimmer. Only used if ember version is also provided.
 * `features`: (optional) Ember feature flag overrides
 * `url`: (optional) path to visit, defaults to `/`
 
