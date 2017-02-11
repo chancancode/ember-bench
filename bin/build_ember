@@ -6,8 +6,8 @@ require_relative "../lib/utils"
 GLIMMER_PACKAGES = ['compiler', 'runtime', 'node', 'reference', 'util']
 
 def has_glimmer_engine
-  packageJSON = parse_json("#{path_for('ember')}/package.json", expand: false)
-  !!packageJSON["devDependencies"]["glimmer-engine"]
+  package_json = parse_json("#{path_for('ember')}/package.json", expand: false)
+  !!package_json["devDependencies"]["glimmer-engine"]
 end
 
 def setup_features(original, overrides)
@@ -32,7 +32,7 @@ end
 
 h1 "Building Ember..."
 
-unless custom_ember
+unless custom_ember?
   h2 "Nothing to do"
   exit
 end
@@ -48,6 +48,7 @@ here do
 end
 
 each_experiment do |experiment|
+  next unless custom_ember?(experiment)
 
   h1 "Building #{experiment['name']}"
 
@@ -59,23 +60,24 @@ each_experiment do |experiment|
     run "git checkout -b #{experiment['name']}"
   end
 
-  in_glimmer do
-    run "rm -rf dist"
+  if custom_glimmer?(experiment)
+    in_glimmer do
+      run "git checkout #{experiment['glimmer']}"
 
-    run "git checkout #{experiment['glimmer']}"
-
-    if has_glimmer_engine
-      run "npm link"
-      run "npm install"
-      run "bower install"
-      run build_command_for("glimmer")
-    else
-      GLIMMER_PACKAGES.each do |package|
-        run "cd ./packages/@glimmer/#{package}"
+      if has_glimmer_engine
         run "npm link"
-        run "cd ../"
+        run "npm install"
+        run "bower install"
+        run build_command_for("glimmer")
+      else
+        run "npm install"
+
+        GLIMMER_PACKAGES.each do |package|
+          in_dir "./packages/@glimmer/#{package}", expand: false do
+            run "npm link"
+          end
+        end
       end
-      run "cd ../../"
     end
   end
 
@@ -93,11 +95,13 @@ each_experiment do |experiment|
     run "npm install"
     run "bower install"
 
-    if has_glimmer_engine
-      run "npm link glimmer-engine"
-    else
-      GLIMMER_PACKAGES.each do |package|
-        run "npm link @glimmer/#{package}"
+    if custom_glimmer?(experiment)
+      if has_glimmer_engine
+        run "npm link glimmer-engine"
+      else
+        GLIMMER_PACKAGES.each do |package|
+          run "npm link @glimmer/#{package}"
+        end
       end
     end
 
@@ -126,22 +130,27 @@ each_experiment do |experiment|
   end
 end
 
-in_ember do
-  if has_glimmer_engine
-    run "npm unlink glimmer-engine"
-  else
-    GLIMMER_PACKAGES.each do |package|
-      run "npm unlink @glimmer/#{package}"
+if custom_glimmer?
+  in_glimmer do
+    run "git checkout ."
+    run "git checkout #{glimmer_previous_head}"
+
+    run "npm install"
+    run "bower install"
+  end
+
+  in_ember do
+    if has_glimmer_engine
+      run "npm unlink glimmer-engine"
+    else
+      GLIMMER_PACKAGES.each do |package|
+        run "npm unlink @glimmer/#{package}"
+      end
     end
   end
-  run "npm install"
-  run "bower install"
 end
 
-in_glimmer do
-  run "git checkout ."
-  run "git checkout #{glimmer_previous_head}"
-
+in_ember do
   run "npm install"
   run "bower install"
 end

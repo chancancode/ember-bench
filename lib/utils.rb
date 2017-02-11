@@ -192,8 +192,22 @@ module Utils
     experiments.each { |experiment| yield experiment }
   end
 
-  def custom_ember
-    @custom_ember ||= experiments.all? { |e| e["ember"] }
+  def custom_ember?(experiment = nil)
+    if experiment
+      experiment["ember"]
+    else
+      experiments.any? { |e| e["ember"] }
+    end
+  end
+
+  def custom_glimmer?(experiment = nil)
+    return false unless custom_ember?(experiment)
+
+    if experiment
+      experiment["glimmer"]
+    else
+      experiments.any? { |e| e["glimmer"] }
+    end
   end
 
   def kill_puma!

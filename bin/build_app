@@ -27,7 +27,7 @@ each_experiment do |experiment|
     run "npm install"
     run "bower install"
 
-    if custom_ember
+    if custom_ember?(experiment)
       run "rm -rf dist bower_components/ember"
       run "ln -s #{full_path('dist/ember-' + experiment['name'])} bower_components/ember"
     end
@@ -48,7 +48,7 @@ in_app do
   run "git checkout ."
   run "git checkout #{previous_head}"
 
-  if custom_ember
+  if custom_ember?
     run "rm bower_components/ember"
   end
 end

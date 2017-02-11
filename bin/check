@@ -28,7 +28,9 @@ h2 "Projects"
 
 $PROJECTS = parse_json("config/projects.json")
 
-libraries = custom_ember ? ["app", "ember", "glimmer"] : ["app"]
+libraries = ["app"]
+libraries << "ember" if custom_ember?
+libraries << "glimmer" if custom_glimmer?
 
 libraries.each do |project|
   puts project
@@ -59,9 +61,7 @@ end
 
 h2 "Experiments"
 
-$EXPERIMENTS = parse_json("config/experiments.json")
-
-$EXPERIMENTS.each_with_index do |experiment, i|
+experiments.each_with_index do |experiment, i|
   unless experiment["name"]
     puts "Experiment ##{i}"
     check "  Has valid name", false, error_message: "Experiment ##{i} needs a name"
@@ -73,7 +73,7 @@ $EXPERIMENTS.each_with_index do |experiment, i|
     check "  Has valid name", false, error_message: "#{experiment['name']} is not a valid name: names can only contain lowercase letters, numbers and dashes"
   end
 
-  if custom_ember
+  if custom_ember?(experiment)
     in_ember(silent: true) do
       if run "git branch | grep '^ *#{experiment["name"]}$'", silent: true, allow_failure: true
         check "  Is not an existing Ember branch", false, error_message: "#{experiment['name']} is an existing branch in Ember, please pick a different name"
